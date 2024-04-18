@@ -61,11 +61,5 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_E81610EA0BEE43A2BAFC8100705843D8 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_6470D9A3A07642C1AFC17A7378C93018 }}
 
-      - name: 'Deploy to Azure Web App'
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'iot-app-new'
-          slot-name: 'Production'
-          package: .
+
           

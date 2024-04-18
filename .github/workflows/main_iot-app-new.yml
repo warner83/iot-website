@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -26,15 +26,12 @@ jobs:
           npm install
           npm run build --if-present
           npm run test --if-present
-
-      - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
-
+      
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: node-app
-          path: release.zip
+          path: .
 
   deploy:
     runs-on: ubuntu-latest
@@ -50,16 +47,19 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: node-app
-
-      - name: Unzip artifact for deployment
-        run: unzip release.zip
       
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_26AD1878577F4ECAB074C00958F4A9AE }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_E81610EA0BEE43A2BAFC8100705843D8 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_6470D9A3A07642C1AFC17A7378C93018 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_6D44A2E1352849F1A184CC48FA0FBAF5 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_DE3C5404F992452CB2C610FB60A334AC }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_D9D32463973B4B9B92CC374441D608D5 }}
 
-
+      - name: 'Deploy to Azure Web App'
+        uses: azure/webapps-deploy@v2
+        id: deploy-to-webapp
+        with:
+          app-name: 'iot-app-new'
+          slot-name: 'Production'
+          package: .
           
